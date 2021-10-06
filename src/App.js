@@ -4,6 +4,7 @@ import LandingPage from './pages/landingPage' //import pages
 import Navbar from './components/navbar'
 import DetailPage from './pages/detailAlbum';
 import LoginPage from './pages/loginPage'
+import Admin from './pages/adminPage'
 // Route : menjadi penghubung page ke BrowserRouter
 import { Route } from 'react-router-dom'
 import VerificationPage from './pages/verification';
@@ -15,6 +16,7 @@ function App() {
       {/* Virtual DOM */}
       <Navbar brand="Shutter" />
       <Route path="/" component={LandingPage} exact />
+      <Route path="/admin" component={Admin}/>
       <Route path="/user-list" component={UserList} />
       <Route path="/account" component={LoginPage} />
       <Route path="/authentication/:token" component={VerificationPage} />
