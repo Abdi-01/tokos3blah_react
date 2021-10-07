@@ -14,8 +14,8 @@ export class App extends Component {
   render() {
     return (
       <>
+      <BrowserRouter>
         <Navbar />
-        <BrowserRouter>
           <Switch>
             <Route path="/" exact component={Home} />
             <Route path="/admin" component={Admin} />
