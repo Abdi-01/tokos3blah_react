@@ -2,23 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import "bootstrap/dist/css/bootstrap.min.css";
-import { BrowserRouter } from "react-router-dom";
-// redux configuration
-import { Provider } from "react-redux"; // untuk menghungkan antara action, reducer dan component
-import { createStore } from "redux"; // untuk membuat global store untuk reducer
-import { Reducers } from "./reducers";
-
-const storeReducer = createStore(Reducers);
 
 ReactDOM.render(
-  <Provider store={storeReducer}>
-    {/* // BrwoserRouter : penghubung seluruh page yg di akomodir oleh App.js */}
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </Provider>,
-  document.getElementById("root")
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+  document.getElementById('root')
 );
 
 // If you want to start measuring performance in your app, pass a function
