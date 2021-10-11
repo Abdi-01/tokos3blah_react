@@ -1,8 +1,14 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import {connect} from "react-redux";
 
 
 export class Navbar extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
   render() {
     return (
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -65,14 +71,16 @@ export class Navbar extends Component {
               </a>
               <div className="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a className="dropdown-item" href="/user">
-                  Profile User
+                  Profile {this.props.fullname}
                 </a>
                 <a className="dropdown-item" href="#">
                   Cart
                 </a>
+                {this.props.role == "admin" && (
                 <a className="dropdown-item" href="/admin">
                   Admin
                 </a>
+                 )}
                 <div className="dropdown-divider"></div>
                 <a className="dropdown-item" href="#">
                   Logout
@@ -98,4 +106,12 @@ export class Navbar extends Component {
   }
 }
 
-export default Navbar;
+
+const mapStateToProps = (state) => {
+  return {
+    fullname: state.authReducer.fullname,
+    role: state.authReducer.role,
+  };
+};
+
+export default connect(mapStateToProps)(Navbar);
