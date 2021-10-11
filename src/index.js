@@ -6,13 +6,19 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter } from "react-router-dom";
 // redux configuration
 import { Provider } from "react-redux"; // untuk menghungkan antara action, reducer dan component
-import { createStore } from "redux"; // untuk membuat global store untuk reducer
+// import { createStore } from "redux"; // untuk membuat global store untuk reducer
 import { Reducers } from "./reducers";
+import { configureStore } from "@reduxjs/toolkit";
 
-const storeReducer = createStore(Reducers);
+const store = configureStore({
+  reducer:Reducers,
+  devTools:true
+})
+
+// const storeReducer = createStore(Reducers);
 
 ReactDOM.render(
-  <Provider store={storeReducer}>
+  <Provider store={store}>
     {/* // BrwoserRouter : penghubung seluruh page yg di akomodir oleh App.js */}
     <BrowserRouter>
       <App />
