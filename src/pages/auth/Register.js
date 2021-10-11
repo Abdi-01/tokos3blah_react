@@ -12,14 +12,13 @@ export class Register extends Component {
   onBtRegister = () => {
     let fullname = this.regisFullname.value;
     let email = this.regisEmail.value;
+    let password = this.regisPass.value;
+    let confPassword = this.regisConfPass.value;
     let address = this.regisAddress.value;
     let age = this.regisAge.value;
     let gender = this.regisGender.value;
 
-    let password = this.regisPass.value;
-    let confPassword = this.regisConfPass.value;
-
-    if (fullname == "" || email == "" ||  password == "" || address =="" || age == "" || gender == "" ) {
+    if (fullname == "" || email == "" ||  password == "" || address == "" || age == "" || gender == "" ) {
       alert("Fill in all the form");
     } else {
       axios
@@ -28,6 +27,8 @@ export class Register extends Component {
           email,
           password,
           address,
+          age,
+          gender,
         })
         .then((res) => console.log(res.data))
         .catch((err) => console.log(err));
@@ -62,24 +63,6 @@ export class Register extends Component {
                   />
                   <input
                     className="form-control my-2"
-                    placeholder="Address"
-                    type="text"
-                    ref={(el) => (this.regisAddress = el)}
-                  />
-                  <input
-                    className="form-control my-2"
-                    placeholder="Age"
-                    type="text"
-                    ref={(el) => (this.regisAge = el)}
-                  />
-                  <input
-                    className="form-control my-2"
-                    placeholder="Male/Female"
-                    type="text"
-                    ref={(el) => (this.regisGender = el)}
-                  />
-                  <input
-                    className="form-control my-2"
                     placeholder="Password"
                     type="password"
                     ref={(el) => (this.regisPass = el)}
@@ -89,6 +72,24 @@ export class Register extends Component {
                     placeholder="Confirmation Password"
                     type="password"
                     ref={(el) => (this.regisConfPass = el)}
+                  />
+                  <input
+                    className="form-control my-2"
+                    placeholder="Address"
+                    type="text"
+                    ref={(el) => (this.regisAddress = el)}
+                  />
+                  <input
+                    className="form-control my-2"
+                    placeholder="Age"
+                    type="Number"
+                    ref={(el) => (this.regisAge = el)}
+                  />
+                  <input
+                    className="form-control my-2"
+                    placeholder="Male/Female"
+                    type="text"
+                    ref={(el) => (this.regisGender = el)}
                   />
                   <div className="d-flex flex-row justify-content-between align-items-center">
                     <button
