@@ -1,9 +1,10 @@
+import React from 'react'
 import logo from './logo.svg';
 import './App.css';
 
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 
-import Navbar  from "./components/Navbar";
+import Navbar  from "./components/navbar";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import Verification from "./pages/auth/Verification";
@@ -11,7 +12,7 @@ import Admin from "./pages/Admin";
 import Userprofile from "./pages/Userprofile";
 import Home from "./pages/Home";
 
-export class App extends Component {
+export class App extends React.Component {
 
   render() {
     return (
