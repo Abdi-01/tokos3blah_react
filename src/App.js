@@ -4,7 +4,7 @@ import './App.css';
 
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 
-import Navbar  from "./components/navbar";
+import Navbar  from "./components/Navbar";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import Verification from "./pages/auth/Verification";
