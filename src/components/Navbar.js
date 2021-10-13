@@ -55,49 +55,55 @@ class Navbar extends Component {
 								</form>
 							</li>
 						</ul>
-
-						<div className="nav-item dropdown">
-							<a
-								className="nav-link dropdown-toggle text-white"
-								href="#"
-								id="navbarDropdown"
-								role="button"
-								data-toggle="dropdown"
-								aria-haspopup="true"
-								aria-expanded="false"
-							>
-								Pages
-							</a>
-							<div className="dropdown-menu" aria-labelledby="navbarDropdown">
-								<a className="dropdown-item" href="/user">
-									Profile {this.props.fullname}
+						{this.props.role ? (
+							<div className="nav-item dropdown">
+								<a
+									className="nav-link dropdown-toggle text-white"
+									id="navbarDropdown"
+									role="button"
+									data-toggle="dropdown"
+									aria-haspopup="true"
+									aria-expanded="false"
+								>
+									Pages
 								</a>
-								<a className="dropdown-item" href="#">
-									Cart
-								</a>
-								{this.props.role == "admin" && (
-									<a className="dropdown-item" href="/admin">
-										Admin
+								<div className="dropdown-menu" aria-labelledby="navbarDropdown">
+									<Link className="dropdown-item" to="/user">
+										Profile {this.props.fullname}
+									</Link>
+									<a className="dropdown-item" href="#">
+										Cart
 									</a>
-								)}
-								<div className="dropdown-divider"></div>
-								<a className="dropdown-item" href="#">
-									Logout
-								</a>
+									{this.props.role == "admin" && (
+										<a className="dropdown-item" href="/admin">
+											Admin
+										</a>
+									)}
+									<div className="dropdown-divider"></div>
+									<a className="dropdown-item" href="#">
+										Logout
+									</a>
+								</div>
 							</div>
-						</div>
-						<div>
-							<a
-								className="btn btn-outline-success btn-sm my-2 ml-2 text-white rounded"
-								href="/login"
-							>
-								Login
-							</a>
-							|
-							<a className="btn btn-success btn-sm my-2 ml-2" href="/register">
-								Register
-							</a>
-						</div>
+						) : (
+							<div>
+								<a
+									className="btn btn-outline-success btn-sm my-2 ml-2 text-white rounded"
+									href="/login"
+								>
+									Login
+								</a>
+								|
+								<Link
+									style={{ textDecoration: "none" }}
+									to="/register"
+									className="btn btn-success btn-sm my-2 ml-2"
+								>
+									Register
+								</Link>
+							</div>
+						)
+						}
 					</div>
 				</div>
 			</nav>
@@ -106,6 +112,7 @@ class Navbar extends Component {
 }
 
 const mapStateToProps = (state) => {
+	console.log(state.authReducer);
 	return {
 		fullname: state.authReducer.fullname,
 		role: state.authReducer.role,
