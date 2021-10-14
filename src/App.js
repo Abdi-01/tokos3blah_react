@@ -12,6 +12,9 @@ import Verification from "./pages/auth/Verification";
 import Admin from "./pages/Admin";
 import Userprofile from "./pages/Userprofile";
 import Home from "./pages/Home";
+import Product from "./pages/Product.jsx"
+import Cart from "./pages/Cart.jsx"
+import ForgotPassword from "./pages/auth/ForgotPassword";
 
 export const history = createBrowserHistory();
 class App extends React.Component {
@@ -27,6 +30,9 @@ class App extends React.Component {
 						<Route path="/register" component={Register} />
 						<Route path="/authentication/:token" component={Verification} />
 						<Route path="/user" component={Userprofile} />
+						<Route path="/product" component={Product} />
+						<Route path="/cart" component={Cart} />
+						<Route path="/ForgotPassword" component={ForgotPassword} />
 					</Switch>
 				</Router>
 			</div>

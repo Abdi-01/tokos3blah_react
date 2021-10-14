@@ -16,12 +16,14 @@ class Login extends React.Component {
 	}
 
 	onBtLogin = () => {
+		this.setState({ alertShow: "none" });
 		axios
 			.post(URL_API + `/users/login`, {
 				email: this.inEmail.value,
 				password: this.inPass.value,
 			})
 			.then((res) => {
+				console.log("ini res login => ", res);
 				sessionStorage.setItem("role", res.data.dataLogin.role);
 
 				console.log(res);
@@ -34,10 +36,16 @@ class Login extends React.Component {
 				this.setState({ logout: true });
 				console.log("Login Success ✔");
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => {
+				console.log("ini err login", err);
+				this.setState({
+					alertShow: "true",
+				});
+			});
 	};
 
 	render() {
+		console.log(this.state.alertShow);
 		if (this.state.redirect) {
 			console.log("Redirect");
 			return <Redirect to="/" />;
@@ -63,6 +71,10 @@ class Login extends React.Component {
 						<div className="card">
 							<div className="card-body">
 								<h5 className="font-weight-bold mb-3">Login</h5>
+								{this.state.alertShow === "true" && 
+								<div class="alert alert-danger" role="alert">
+								Email / password yang anda masukan salah, silakan coba lagi atau register jika anda belum memiliki akun
+							</div>}
 								<input
 									name="Email"
 									ref={(el) => (this.inEmail = el)}
@@ -78,14 +90,15 @@ class Login extends React.Component {
 									className="form-control my-2"
 								/>
 								<div className="d-flex flex-row justify-content-between align-items-center">
-									<button type="button"
-										onClick={this.onBtLogin }
+									<button
+										type="button"
+										onClick={this.onBtLogin}
 										className="btn btn-primary mt-2"
 									>
 										Login
 									</button>
 									<Link to="/register">Or Register</Link>
-									<Link to="/">Forgot Password</Link>
+									<Link to="/ForgotPassword">Forgot Password</Link>
 								</div>
 							</div>
 						</div>

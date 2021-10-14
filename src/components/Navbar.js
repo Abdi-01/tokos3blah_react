@@ -71,13 +71,13 @@ class Navbar extends Component {
 									<Link className="dropdown-item" to="/user">
 										Profile {this.props.fullname}
 									</Link>
-									<a className="dropdown-item" href="#">
+									<Link className="dropdown-item" to="/cart">
 										Cart
-									</a>
+									</Link>
 									{this.props.role == "admin" && (
-										<a className="dropdown-item" href="/admin">
+										<Link className="dropdown-item" to="/admin">
 											Admin
-										</a>
+										</Link>
 									)}
 									<div className="dropdown-divider"></div>
 									<a className="dropdown-item" href="#">
