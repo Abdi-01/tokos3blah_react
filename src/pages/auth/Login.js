@@ -22,18 +22,15 @@ class Login extends React.Component {
 				password: this.inPass.value,
 			})
 			.then((res) => {
+				sessionStorage.setItem("role", res.data.dataLogin.role);
+
 				console.log(res);
 				localStorage.setItem("token_s3blah", res.data.token);
-				if (res.data.dataLogin.role === "admin") {
-					this.setState({ redirect: true, role: "admin" });
-				} else {
-					this.setState({ redirect: true, role: "user" });
-				}
 				// menjalankan fungsi action
-				//this.props.authLogin(res.data.dataLogin);
+				this.props.authLogin(res.data.dataLogin);
 				console.log(res.data.token);
 				console.log(res.data.dataLogin);
-				// this.setState({ redirect: true });
+				this.setState({ redirect: true });
 				this.setState({ logout: true });
 				console.log("Login Success ✔");
 			})
@@ -43,11 +40,7 @@ class Login extends React.Component {
 	render() {
 		if (this.state.redirect) {
 			console.log("Redirect");
-			if (this.state.role === "admin") {
-				return <Redirect to="/admin" />;
-			} else {
-				return <Redirect to="/" />;
-			}
+			return <Redirect to="/" />;
 		}
 		return (
 			<div className="container">
@@ -85,8 +78,8 @@ class Login extends React.Component {
 									className="form-control my-2"
 								/>
 								<div className="d-flex flex-row justify-content-between align-items-center">
-									<button
-										onClick={this.onBtLogin}
+									<button type="button"
+										onClick={this.onBtLogin }
 										className="btn btn-primary mt-2"
 									>
 										Login
