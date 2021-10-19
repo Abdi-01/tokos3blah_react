@@ -15,6 +15,7 @@ import Home from "./pages/Home";
 import Product from "./pages/Product.jsx"
 import Cart from "./pages/Cart.jsx"
 import ForgotPassword from "./pages/auth/ForgotPassword";
+import ChangePassword from "./pages/auth/ChangePassword";
 
 export const history = createBrowserHistory();
 class App extends React.Component {
@@ -33,6 +34,7 @@ class App extends React.Component {
 						<Route path="/product" component={Product} />
 						<Route path="/cart" component={Cart} />
 						<Route path="/ForgotPassword" component={ForgotPassword} />
+						<Route path="/change-password/:token" component={ChangePassword} />
 					</Switch>
 				</Router>
 			</div>
