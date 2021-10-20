@@ -1,7 +1,6 @@
 import React, { Component } from "react";
-// import image_user from "../asset/image/logo.jpeg";
 import { history } from "../App";
-import { Link, Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export class SuperAdmin extends Component {
 	constructor(props) {
