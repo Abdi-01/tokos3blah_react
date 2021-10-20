@@ -17,7 +17,8 @@ import Product from "./pages/Product.jsx"
 import Cart from "./pages/Cart.jsx"
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import ChangePassword from "./pages/auth/ChangePassword";
-
+import AddAdmin from "./pages/AddAdmin";
+import AddWarehouse from "./pages/AddWarehouse";
 export const history = createBrowserHistory();
 class App extends React.Component {
 	render() {
@@ -29,6 +30,8 @@ class App extends React.Component {
 						<Route path="/" exact component={Home} />
 						<Route path="/admin" component={Admin} />
 						<Route path="/super_admin" component={SuperAdmin} />
+						<Route path="/add_admin" component={AddAdmin} />
+						<Route path="/add_warehouse" component={AddWarehouse} />
 						<Route path="/login" component={Login} />
 						<Route path="/register" component={Register} />
 						<Route path="/authentication/:token" component={Verification} />
