@@ -28,6 +28,13 @@ class Login extends React.Component {
 
 				console.log(res);
 				localStorage.setItem("token_s3blah", res.data.token);
+				if (res.data.dataLogin.role === "user") {
+					this.setState({ redirect: true, role: "user" });
+				} else if (res.data.dataLogin.role === "admin") {
+					this.setState({ redirect: true, role: "admin" });
+				} else {
+					this.setState({ redirect: true, role: "super_admin" });
+				}
 				// menjalankan fungsi action
 				this.props.authLogin(res.data.dataLogin);
 				console.log(res.data.token);
@@ -45,10 +52,15 @@ class Login extends React.Component {
 	};
 
 	render() {
-		console.log(this.state.alertShow);
 		if (this.state.redirect) {
 			console.log("Redirect");
-			return <Redirect to="/" />;
+			if (this.state.role === "admin") {
+				return <Redirect to="/admin" />;
+			} else if (this.state.role === "super_admin") {
+				return <Redirect to="/super_admin" />;
+			} else {
+				return <Redirect to="/" />;
+			}
 		}
 		return (
 			<div className="container">
@@ -71,10 +83,12 @@ class Login extends React.Component {
 						<div className="card">
 							<div className="card-body">
 								<h5 className="font-weight-bold mb-3">Login</h5>
-								{this.state.alertShow === "true" && 
-								<div class="alert alert-danger" role="alert">
-								Email / password yang anda masukan salah, silakan coba lagi atau register jika anda belum memiliki akun
-							</div>}
+								{this.state.alertShow === "true" && (
+									<div class="alert alert-danger" role="alert">
+										Email / password yang anda masukan salah, silakan coba lagi
+										atau register jika anda belum memiliki akun
+									</div>
+								)}
 								<input
 									name="Email"
 									ref={(el) => (this.inEmail = el)}
