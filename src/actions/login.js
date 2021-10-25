@@ -9,7 +9,7 @@ export const authLogin = (data) => {
 };
 
 export const userKeepLoginAction = (dispatch, userLocalStorage) => {
-	Axios.post(
+	Axios.get(
 		"http://localhost:2200/users/keep-login",
 		{},
 		{

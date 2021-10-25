@@ -10,6 +10,7 @@ import {
 	FormText,
 	Table,
 } from "reactstrap";
+import { history } from "../App";
 
 export class AddWarehouse extends Component {
 	constructor(props) {
@@ -19,6 +20,13 @@ export class AddWarehouse extends Component {
 			selectedID: null,
 		};
 	}
+
+	componentDidMount() {
+		if (sessionStorage.getItem("role") !== "super_admin") {
+			history.push("/");
+		}
+	}
+
 	componentDidMount() {
 		this.getWarehouse();
 	}
@@ -103,11 +111,14 @@ export class AddWarehouse extends Component {
 						</td>
 						<td>
 							<Input
-								type="text"
+								type="option"
 								name="text"
 								innerRef={(newStatus) => (this.newStatus = newStatus)}
 								defaultValue={item.Status}
-							/>
+							>
+								<option value={"active"}>Active</option>
+								<option value={"Inactive"}>Inactive</option>
+							</Input>
 						</td>
 						<td>
 							<Button
