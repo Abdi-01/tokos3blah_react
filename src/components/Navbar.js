@@ -2,6 +2,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import {logoutAction} from "../actions/login"
 
 class Navbar extends Component {
 	constructor(props) {
@@ -80,7 +81,7 @@ class Navbar extends Component {
 										</Link>
 									)}
 									<div className="dropdown-divider"></div>
-									<a className="dropdown-item" href="#">
+									<a className="dropdown-item" onClick={this.props.logoutAction}  href="#">
 										Logout
 									</a>
 								</div>
@@ -119,4 +120,8 @@ const mapStateToProps = (state) => {
 	};
 };
 
-export default connect(mapStateToProps)(Navbar);
+const mapDispatchToProps = {
+	logoutAction,
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Navbar);

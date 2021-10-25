@@ -4,6 +4,8 @@ import "./App.css";
 import { createBrowserHistory } from "history";
 
 import { Router, Route, Switch } from "react-router-dom";
+import {connect} from "react-redux";
+import {userKeepLoginAction}from './actions/login'
 
 import Navbar  from "./components/Navbar";
 import Login from "./pages/auth/Login";
@@ -21,6 +23,14 @@ import AddAdmin from "./pages/AddAdmin";
 import AddWarehouse from "./pages/AddWarehouse";
 export const history = createBrowserHistory();
 class App extends React.Component {
+
+	// componentDidMount () {
+	// 	const userLocalStorage = localStorage.getItem("token_s3blah")
+
+	// 	if (userLocalStorage){
+	// 		const userData
+	// 	}
+	// }
 	render() {
 		return (
 			<div className="App">

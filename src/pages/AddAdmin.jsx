@@ -12,6 +12,7 @@ import {
 	FormText,
 	Table,
 } from "reactstrap";
+import axios from "axios";
 
 export class AddAdmin extends Component {
 	constructor(props) {
@@ -28,6 +29,7 @@ export class AddAdmin extends Component {
 	getData = () => {
 		Axios.get(URL_API + "/users/getAdmin")
 			.then((res) => {
+				console.log(res.data);
 				this.setState({ db_tokos3blah: res.data });
 			})
 			.catch((err) => {
@@ -79,7 +81,22 @@ export class AddAdmin extends Component {
 							<Button onClick={() => this.setState({ selectedID: index })}>
 								Edit
 							</Button>
-							<Button>Delete</Button>
+							<Button
+								onClick={() => {
+									console.log("delete euy => ", item.fullname);
+									Axios.post(URL_API + "/users/delete-admin", {
+										iduser: item.iduser,
+									})
+										.then((res) => {
+											this.getData();
+										})
+										.catch((err) => {
+											console.log(err);
+										});
+								}}
+							>
+								Delete
+							</Button>
 						</td>
 					</tr>
 				);
@@ -92,7 +109,7 @@ export class AddAdmin extends Component {
 								type="text"
 								name="text"
 								innerRef={(newnama) => (this.newnama = newnama)}
-								defaultValue={item.nama}
+								defaultValue={item.fullname}
 							/>
 						</td>
 						<td>
@@ -144,21 +161,33 @@ export class AddAdmin extends Component {
 							/>
 						</td>
 						<td>
-							{this.state.selectedID == null ? (
-								<>
-									<Button onClick={() => this.setState({ selectedID: index })}>
-										Edit
-									</Button>
-									<Button>Delete</Button>
-								</>
-							) : (
-								<>
-									<Button onClick={() => this.setState({ selectedID: null })}>
-										No
-									</Button>
-									<Button>Yes</Button>
-								</>
-							)}
+							<Button
+								onClick={async () => {
+									console.log("kepencet");
+									await Axios.patch(URL_API + "/users/edit-Admin", {
+										iduser: item.iduser,
+										fullname: this.newnama.value,
+										email: this.newemail.value,
+										//	password: this.newpassword.value,
+										age: parseInt(this.newage.value),
+										gender: this.newgender.value,
+										role: this.newrole.value,
+										id_warehouse: this.id_warehouse.value,
+									})
+										.then((res) => {
+											this.setState({ selectedID: null });
+											this.getData();
+										})
+										.catch((err) => {
+											console.log(err);
+										});
+								}}
+							>
+								yes
+							</Button>
+							<Button onClick={() => this.setState({ selectedID: null })}>
+								No
+							</Button>
 						</td>
 					</tr>
 				);
