@@ -25,6 +25,7 @@ class Login extends React.Component {
       .then((res) => {
         console.log("ini res login => ", res);
         sessionStorage.setItem("role", res.data.dataLogin.role);
+        sessionStorage.setItem("id", res.data.dataLogin.iduser);
 
         console.log(res);
         localStorage.setItem("token_s3blah", res.data.token);

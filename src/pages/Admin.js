@@ -17,6 +17,7 @@ export class Admin extends Component {
       page: 1,
       maxPage: 0,
       itemPerPage: 5,
+      productSelector: [],
 
       addFileName: "",
       addFile: [],
@@ -30,20 +31,20 @@ export class Admin extends Component {
 
       productRadio: "",
 
-      editId: 0,
+      editId: null,
 
       // editProductName: "",
       // editPrice: 0,
       // editCategory: "",
       // editImgproduct: "",
       // editWarehouse: "",
-      editQuantity: "",
+      editQuantity: 0,
     };
   }
 
   fetchProducts = () => {
     console.log(this.props.id);
-    Axios.get(`${URL_API}/products/get/${this.props.id}`)
+    Axios.get(`${URL_API}/products/get/${sessionStorage.getItem("id")}`)
 
       .then((result) => {
         this.setState({
@@ -65,7 +66,7 @@ export class Admin extends Component {
           return { ...val, value: val.id_product, label: val.productName };
         });
         this.setState({
-          productList: generate,
+          productSelector: generate,
         });
       })
       .catch((err) => {
@@ -76,13 +77,13 @@ export class Admin extends Component {
 
   editToggle = (editData) => {
     this.setState({
-      editId: editData.id_product,
+      editId: editData,
       // editProductName: editData.productName,
       // editPrice: parseInt(editData.price),
       // editCategory: editData.category,
       // editImgproduct: editData.img_product,
       // editWarehouse: editData.id_warehouse,
-      editQuantity: editData.Quantity,
+      // editQuantity: editData.Quantity,
     });
   };
 
@@ -92,14 +93,17 @@ export class Admin extends Component {
 
   saveBtnHandler = () => {
     Axios.patch(`${URL_API}/products/edit-product/${this.state.editId}`, {
-      Quantity: this.state.editQuantity,
+      Quantity: parseInt(this.Quantity.value),
+
+      // Quantity: parseInt(this.state.editQuantity),
     })
       .then(() => {
         this.fetchProducts();
         this.cancelEdit();
       })
-      .catch(() => {
-        alert("Terjadi Kesalahan");
+      .catch((err) => {
+        console.log(err);
+        // alert("Terjadi Kesalahan");
       });
   };
 
@@ -124,8 +128,43 @@ export class Admin extends Component {
       beginningIndex,
       beginningIndex + this.state.itemPerPage
     );
-    return currentData.map((val) => {
-      if (val.id_product === this.state.editId) {
+    return currentData.map((val, index) => {
+      if (index !== this.state.editId) {
+        return (
+          <tr>
+            <td scope="col">{index + 1}</td>
+            <td scope="col">{val.productName}</td>
+            <td scope="col">{val.price}</td>
+            <td scope="col">{val.category}</td>
+            <td scope="col">
+              <img
+                src={URL_API + val.img_product}
+                className="img-thumbnail mb-2"
+                alt="image_user"
+                style={{ width: "100px" }}
+              />
+            </td>
+            <td scope="col">{val.Kode_Gudang}</td>
+            <td scope="col">{val.Quantity}</td>
+            <td scope="col">
+              <button
+                onClick={() => this.editToggle(index)}
+                className="btn btn-success mr-2"
+                type="submit"
+              >
+                Edit
+              </button>
+              <button
+                onClick={() => this.deleteBtnHandler(val.id)}
+                className="btn btn-danger"
+                type="submit"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        );
+      } else {
         return (
           <tr>
             <td scope="col">{val.id_product}</td>
@@ -141,18 +180,17 @@ export class Admin extends Component {
               />
             </td>
             <td scope="col">{val.Kode_Gudang}</td>
-            <div class="form-group">
-              <label for="exampleFormControlFile1">Qty :</label>
+            <td>
               <input
                 onChange={this.inputHandler}
-                type="number"
                 class="form-control"
-                id="editQuantity"
-                name="editQuantity"
-                defaultValue="0"
+                type="number"
+                name="editQuantiy"
+                // defaultValue={this.state.editQuantity}
+                innerRef={(Quantity) => (this.Quantity = Quantity)}
+                defaultValue={val.Quantity}
               />
-            </div>
-
+            </td>
             <td scope="col">
               <button
                 onClick={this.saveBtnHandler}
@@ -168,41 +206,6 @@ export class Admin extends Component {
           </tr>
         );
       }
-
-      return (
-        <tr>
-          <td scope="col">{val.id_product}</td>
-          <td scope="col">{val.productName}</td>
-          <td scope="col">{val.price}</td>
-          <td scope="col">{val.category}</td>
-          <td scope="col">
-            <img
-              src={URL_API + val.img_product}
-              className="img-thumbnail mb-2"
-              alt="image_user"
-              style={{ width: "100px" }}
-            />
-          </td>
-          <td scope="col">{val.Kode_Gudang}</td>
-          <td scope="col">{val.Quantity}</td>
-          <td scope="col">
-            <button
-              onClick={() => this.editToggle(val)}
-              className="btn btn-success mr-2"
-              type="submit"
-            >
-              Edit
-            </button>
-            <button
-              onClick={() => this.deleteBtnHandler(val.id_product)}
-              className="btn btn-danger"
-              type="submit"
-            >
-              Delete
-            </button>
-          </td>
-        </tr>
-      );
     });
   };
 
@@ -299,10 +302,11 @@ export class Admin extends Component {
     }
 
     this.fetchProducts();
-    this.selectProducts();
+    // this.selectProducts();
   }
 
   render() {
+    console.log(this.state.productList);
     return (
       <div className="container">
         <h1 className="text-center mt-3 mb-3">Product List</h1>
@@ -510,7 +514,7 @@ export class Admin extends Component {
                         </label>
 
                         <Select
-                          options={this.state.productList}
+                          options={this.state.productSelector}
                           value={this.state.selectedOption}
                           onChange={this.handleChange}
                         />
@@ -558,7 +562,7 @@ export class Admin extends Component {
 const mapStateToProps = (state) => {
   console.log(state.authReducer);
   return {
-    id: state.authReducer.id,
+    id: state.authReducer.iduser,
     id_warehouse: state.authReducer.id_warehouse,
     // fullname: state.authReducer.fullname,
     // role: state.authReducer.role,

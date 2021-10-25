@@ -44,7 +44,7 @@ class Navbar extends Component {
                   Pages
                 </a>
                 <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <Link className="dropdown-item" to="/user">
+                  <Link className="dropdown-item" to={`/user/${this.props.id}`}>
                     Profile {this.props.fullname}
                   </Link>
                   <Link className="dropdown-item" to="/cart">
@@ -89,7 +89,7 @@ class Navbar extends Component {
 const mapStateToProps = (state) => {
   console.log(state.authReducer);
   return {
-    id: state.authReducer.id,
+    id: state.authReducer.iduser,
     fullname: state.authReducer.fullname,
     role: state.authReducer.role,
   };

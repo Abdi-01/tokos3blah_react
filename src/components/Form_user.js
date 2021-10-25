@@ -1,17 +1,16 @@
 import React, { Component } from "react";
 import image_user from "../asset/image/logo.jpeg";
 import { Link } from "react-router-dom";
+
 import Axios from "axios";
 import { URL_API } from "../helper";
+import { connect } from "react-redux";
+import { history } from "../App";
 
 export class Form_user extends Component {
   state = {
-    name: "",
-    gender: "",
-    age: "",
-    email: "",
-    address: "",
-    profile_picture: "",
+    addFile: [],
+    addFileName: "",
   };
 
   editUser = () => {
@@ -19,31 +18,27 @@ export class Form_user extends Component {
       let formData = new FormData();
 
       let obj = {
-        name: this.state.name,
-        gender: this.state.gender,
-        age: this.state.age,
-        email: this.state.email,
-        address: this.state.address,
+        fullname: this.fullname.value,
+        gender: this.gender.value,
+        age: this.age.value,
+        email: this.email.value,
+        AddressDb: this.AddressDb.value,
       };
 
       formData.append("data", JSON.stringify(obj));
       formData.append("file", this.state.addFile);
-      Axios.patch(`${URL_API}/user/add-user/${this.state.iduser}`, formData)
+
+      console.log(formData);
+      Axios.patch(`${URL_API}/admin/updateProfile/${this.props.id}`, formData)
         .then(() => {
-          alert("berhasil menambahkan data");
+          alert("berhasil mengubah data");
+          history.push("/user");
         })
         .catch((err) => {
-          console.log(err)
+          console.log(err);
           // alert("Terjadi Kesalahan");
         });
     }
-
-  };
-
-  inputHandler = (event) => {
-    const { name, value } = event.target;
-
-    this.setState({ [name]: value });
   };
 
   onBtnAddFile = (event) => {
@@ -84,42 +79,23 @@ export class Form_user extends Component {
                     onChange={this.inputHandler}
                     type="text"
                     className="form-control"
-                    id="name"
-                    name="name"
+                    ref={(el) => (this.fullname = el)}
+                    defaultValue={this.props.fullname}
                   />
                 </div>
               </div>
               <div className="form-group row">
-                <label for="jeniskelamin">Gender :</label>
-                <div className="col-sm-8 mx-auto">
-                  <div className="form-check form-check-inline">
-                    <input
-                      onChange={this.inputHandler}
-                      className="form-check-input"
-                      type="radio"
-                      name="inlineRadioOptions"
-                      id="inlineRadio1"
-                      value="gender"
-                      name="male"
-                    />
-                    <label className="form-check-label" for="inlineRadio1">
-                      Male
-                    </label>
-                  </div>
-                  <div className="form-check form-check-inline">
-                    <input
-                      onChange={this.inputHandler}
-                      className="form-check-input"
-                      type="radio"
-                      name="inlineRadioOptions"
-                      id="inlineRadio2"
-                      value="gender"
-                      name="Female"
-                    />
-                    <label className="form-check-label" for="inlineRadio2">
-                      Female
-                    </label>
-                  </div>
+                <label for="inputPassword" className="col-sm-2 col-form-label">
+                  gender :
+                </label>
+                <div className="col-sm-8">
+                  <input
+                    onChange={this.inputHandler}
+                    type="text"
+                    className="form-control"
+                    ref={(el) => (this.gender = el)}
+                    defaultValue={this.props.gender}
+                  />
                 </div>
               </div>
               <div className="form-group row">
@@ -131,8 +107,8 @@ export class Form_user extends Component {
                     onChange={this.inputHandler}
                     type="number"
                     className="form-control"
-                    id="age"
-                    name="age"
+                    ref={(el) => (this.age = el)}
+                    defaultValue={this.props.age}
                   />
                 </div>
               </div>
@@ -145,8 +121,8 @@ export class Form_user extends Component {
                     onChange={this.inputHandler}
                     type="email"
                     className="form-control"
-                    id="email"
-                    name="email"
+                    ref={(el) => (this.email = el)}
+                    defaultValue={this.props.email}
                   />
                 </div>
               </div>
@@ -159,8 +135,7 @@ export class Form_user extends Component {
                     onChange={this.inputHandler}
                     type="text"
                     className="form-control"
-                    id="address"
-                    name="address"
+                    ref={(el) => (this.AddressDb = el)}
                   ></textarea>
                 </div>
               </div>
@@ -194,4 +169,16 @@ export class Form_user extends Component {
   }
 }
 
-export default Form_user;
+const mapStateToProps = (state) => {
+  console.log(state.authReducer.id);
+  return {
+    id: state.authReducer.iduser,
+    fullname: state.authReducer.fullname,
+    email: state.authReducer.email,
+    age: state.authReducer.age,
+    AddressDb: state.authReducer.AddressDb,
+    gender: state.authReducer.gender,
+  };
+};
+
+export default connect(mapStateToProps)(Form_user);
