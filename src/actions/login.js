@@ -45,10 +45,10 @@ export const CheckStorageAction = (dispatch) => {
 	});
 };
 
-export const logoutAction = (dispatch) => {
+export const logoutAction = () => {
 	localStorage.removeItem("token_s3blah");
 
-	dispatch({
+	return({
 		type: "USER_LOGOUT",
 	});
 };
