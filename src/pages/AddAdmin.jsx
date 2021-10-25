@@ -11,8 +11,8 @@ import {
 	Input,
 	FormText,
 	Table,
+	mio,
 } from "reactstrap";
-import axios from "axios";
 
 export class AddAdmin extends Component {
 	constructor(props) {

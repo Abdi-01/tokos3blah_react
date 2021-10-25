@@ -57,10 +57,25 @@ export class AddWarehouse extends Component {
 						<td>{item.Lokasi}</td>
 						<td>{item.Status}</td>
 						<td>
-							<Button onclick={() => this.setState({ selectedID: index })}>
+							<Button onClick={() => this.setState({ selectedID: index })}>
 								edit
 							</Button>
-							<Button>Delete</Button>
+							<Button
+								onClick={() => {
+									console.log("delete Gudang => ", item.Kode_Gudang);
+									Axios.post(URL_API + "/warehouse/delete-warehouse", {
+										id_warehouse: item.id_warehouse,
+									})
+										.then((res) => {
+											this.getWarehouse();
+										})
+										.catch((err) => {
+											console.log(err);
+										});
+								}}
+							>
+								Delete
+							</Button>
 						</td>
 					</tr>
 				);
@@ -95,13 +110,36 @@ export class AddWarehouse extends Component {
 							/>
 						</td>
 						<td>
-							{this.state.selectedID === null ? (
-								<>
-									<Button onClick={() => this.setState({ selectedID: index })}>
-										Edit
-									</Button>
-									<Button>Delete</Button>
-								</>
+							<Button
+								onClick={async () => {
+									console.log("kepencet edit");
+									await Axios.patch(URL_API + "/warehouse/editwarehouse", {
+										id_warehouse: item.id_warehouse,
+										Kode_Gudang: this.newKode_Gudang.value,
+										Lokasi: this.newLokasi.value,
+										Status: this.newStatus.value,
+									})
+										.then((res) => {
+											this.setState({ selectedID: null });
+											this.getWarehouse();
+										})
+										.catch((err) => {
+											console.log(err);
+										});
+								}}
+							>
+								yes
+							</Button>
+							<Button onClick={() => this.setState({ selectedID: null })}>
+								No
+							</Button>
+							{/* {this.state.selectedID === null ? (
+								// <>
+								// 	<Button onClick={() => this.setState({ selectedID: index })}>
+								// 		Edit
+								// 	</Button>
+								// 	<Button>Delete</Button>
+								// </>
 							) : (
 								<>
 									<Button onClick={() => this.setState({ selectedID: null })}>
@@ -109,7 +147,7 @@ export class AddWarehouse extends Component {
 									</Button>
 									<Button>Yes</Button>
 								</>
-							)}
+							)} */}
 						</td>
 					</tr>
 				);
