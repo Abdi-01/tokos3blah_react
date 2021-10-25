@@ -3,6 +3,7 @@ const INITIAL_STATE = {
   fullname: "",
   password: "",
   role: "",
+  id_warehouse: "",
 };
 
 export const authReducer = (state = INITIAL_STATE, action) => {
@@ -20,4 +21,3 @@ export const authReducer = (state = INITIAL_STATE, action) => {
       return state;
   }
 };
-

@@ -7,7 +7,7 @@ import { Router, Route, Switch } from "react-router-dom";
 import {connect} from "react-redux";
 import {userKeepLoginAction}from './actions/login'
 
-import Navbar  from "./components/Navbar";
+import Navbar from "./components/Navbar";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import Verification from "./pages/auth/Verification";
@@ -15,14 +15,18 @@ import Admin from "./pages/Admin";
 import SuperAdmin from "./pages/SuperAdmin";
 import Userprofile from "./pages/Userprofile";
 import Home from "./pages/Home";
-import Product from "./pages/Product.jsx"
-import Cart from "./pages/Cart.jsx"
+import Product from "./pages/Product.jsx";
+import Cart from "./pages/Cart.jsx";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import ChangePassword from "./pages/auth/ChangePassword";
 import AddAdmin from "./pages/AddAdmin";
 import AddWarehouse from "./pages/AddWarehouse";
+import Form_user from "./components/Form_user";
+import ProductDetail from "./pages/ProductDetail";
+
 export const history = createBrowserHistory();
 class App extends React.Component {
+
 
 	// componentDidMount () {
 	// 	const userLocalStorage = localStorage.getItem("token_s3blah")
@@ -50,11 +54,14 @@ class App extends React.Component {
 						<Route path="/cart" component={Cart} />
 						<Route path="/ForgotPassword" component={ForgotPassword} />
 						<Route path="/change-password/:token" component={ChangePassword} />
+            <Route path="/form_user" component={Form_user} />
+            <Route path="/ProductDetail/:productId" component={ProductDetail} />
 					</Switch>
 				</Router>
 			</div>
 		);
 	}
+
 }
 
 export default App;
