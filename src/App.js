@@ -4,8 +4,8 @@ import "./App.css";
 import { createBrowserHistory } from "history";
 
 import { Router, Route, Switch } from "react-router-dom";
-import {connect} from "react-redux";
-import {userKeepLoginAction}from './actions/login'
+import { connect } from "react-redux";
+import { userKeepLoginAction } from "./actions/login";
 
 import Navbar from "./components/Navbar";
 import Login from "./pages/auth/Login";
@@ -23,11 +23,10 @@ import AddAdmin from "./pages/AddAdmin";
 import AddWarehouse from "./pages/AddWarehouse";
 import Form_user from "./components/Form_user";
 import ProductDetail from "./pages/ProductDetail";
+import Sidebar from "./components/layout/Sidebar";
 
 export const history = createBrowserHistory();
 class App extends React.Component {
-
-
 	// componentDidMount () {
 	// 	const userLocalStorage = localStorage.getItem("token_s3blah")
 
@@ -43,9 +42,22 @@ class App extends React.Component {
 					<Switch>
 						<Route path="/" exact component={Home} />
 						<Route path="/admin" component={Admin} />
-						<Route path="/super_admin" component={SuperAdmin} />
-						<Route path="/add_admin" component={AddAdmin} />
-						<Route path="/add_warehouse" component={AddWarehouse} />
+						<Route path="/super_admin">
+							<Sidebar>
+								<SuperAdmin />
+							</Sidebar>
+						</Route>
+						<Route path="/add_admin">
+							{" "}
+							<Sidebar>
+								<AddAdmin />
+							</Sidebar>{" "}
+						</Route>
+						<Route path="/add_warehouse">
+							<Sidebar>
+								<AddWarehouse />
+							</Sidebar>{" "}
+						</Route>
 						<Route path="/login" component={Login} />
 						<Route path="/register" component={Register} />
 						<Route path="/authentication/:token" component={Verification} />
@@ -54,14 +66,13 @@ class App extends React.Component {
 						<Route path="/cart" component={Cart} />
 						<Route path="/ForgotPassword" component={ForgotPassword} />
 						<Route path="/change-password/:token" component={ChangePassword} />
-            <Route path="/form_user" component={Form_user} />
-            <Route path="/ProductDetail/:productId" component={ProductDetail} />
+						<Route path="/form_user" component={Form_user} />
+						<Route path="/ProductDetail/:productId" component={ProductDetail} />
 					</Switch>
 				</Router>
 			</div>
 		);
 	}
-
 }
 
 export default App;

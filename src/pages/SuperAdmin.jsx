@@ -18,13 +18,18 @@ export class SuperAdmin extends Component {
 
 	render() {
 		return (
-			<div className="container">
-				<h1>Tempat SuperAdmin Kumpul</h1>
-				<div className="button">
-					<Link className="btn btn-primary btn-lg active" role="button" aria-pressed="true" to="/add_admin"> admin</Link>
-					<Link className="btn btn-primary btn-lg active" role="button" aria-pressed="true" to="/add_warehouse"> gudang</Link>
+
+		
+	
+
+			<div className="container flexbox">
+				<div className="row row-cols-10">
+					<h1>Hello Admin {sessionStorage.getItem("fullname")}</h1>
 				</div>
-			</div>
+
+				
+				</div>
+			
 		);
 	}
 }

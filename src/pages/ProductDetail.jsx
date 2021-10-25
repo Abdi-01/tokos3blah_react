@@ -38,6 +38,12 @@ export default class ProductDetail extends Component {
 
   render() {
     return (
+      // <div className = "container">
+      //   <div className = "row">
+      //     <div className="cpl"
+      //   </div>
+
+      // </div>
       <div className="container ">
         <div className="card mt-5">
           <div className="card-header">

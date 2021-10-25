@@ -5,6 +5,14 @@ import { URL_API } from "../helper";
 export default class ProductCard extends Component {
   render() {
     return (
+
+      // <div className="container">
+      //   <div className="row">
+      //     <div className="col bg-success"></div>
+      //     <div className="col bg"></div>
+      //   </div>
+        
+      // </div>
       <div className="col-md-3">
         <div className="card mb-3">
           <img

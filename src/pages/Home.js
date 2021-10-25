@@ -115,19 +115,12 @@ export class Home extends Component {
     return (
       <div className="container-fluid p-0 m-0">
         <div className="jumbotron text-center bg-dark text-white">
-          <h1 className="display-4">Hello, world!</h1>
+          <h1 className="display-4">Selamat Datang di TokoS3blah</h1>
 
           <p className="lead">
-            This is a simple hero unit, a simple jumbotron-style component for
-            calling extra attention to featured content or information.
+            cari kebutuhan harian? atau ingin memenuhi hobi? coba cek toko s3blah dulu
           </p>
-          <p>
-            It uses utility classes for typography and spacing to space content
-            out within the larger container.
-          </p>
-          <a className="btn btn-primary btn-lg" href="#" role="button">
-            Learn more
-          </a>
+          
         </div>
 
         <div className="container">
