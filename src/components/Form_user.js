@@ -32,8 +32,9 @@ export class Form_user extends Component {
         .then(() => {
           alert("berhasil menambahkan data");
         })
-        .catch(() => {
-          alert("Terjadi Kesalahan");
+        .catch((err) => {
+          console.log(err)
+          // alert("Terjadi Kesalahan");
         });
     }
 

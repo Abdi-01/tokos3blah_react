@@ -18,8 +18,9 @@ export default class ProductDetail extends Component {
           this.setState({ productNotFound: true });
         }
       })
-      .catch(() => {
-        alert("Terjadi kesalahan di server");
+      .catch((err) => {
+        console.log(err);
+        // alert("Terjadi kesalahan di server");
       });
   };
 
