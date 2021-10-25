@@ -15,7 +15,8 @@ export class User_data extends Component {
         this.setState({ userList: result.data });
       })
       .catch((err) => {
-        alert("Terjadi Kesalahan di Server");
+        console.log(err)
+        // alert("Terjadi Kesalahan di Server");
       });
   };
 
@@ -27,18 +28,13 @@ export class User_data extends Component {
     return this.state.userList.map((val) => {
       return (
         <tr>
-          <td scope="col">{val.id_product}</td>
-          <td scope="col">{val.productName}</td>
-          <td scope="col">{val.price}</td>
-          <td scope="col">{val.category}</td>
-          <td scope="col">
-            <img
-              src={val.img_product}
-              className="img-thumbnail mb-2"
-              alt="image_user"
-              style={{ width: "100px" }}
-            />
-          </td>
+          <td scope="col">{val.iduser}</td>
+          <td scope="col">{val.fullname}</td>
+          <td scope="col">{val.email}</td>
+          <td scope="col">{val.age}</td>
+          <td scope="col">{val.AddressDb}</td>
+          <td scope="col">{val.password}</td>
+          
           <td scope="col">
             <button
               onClick={() => this.editToggle(val)}

@@ -3,6 +3,10 @@ import image_user from "../asset/image/logo.jpeg";
 import { history } from "../App";
 import Axios from "axios";
 import { URL_API } from "../helper";
+// import CustomSelect from "../components/CustomSelect";
+import { connect } from "react-redux";
+import Select from "react-select";
+import { Link } from "react-router-dom";
 
 export class Admin extends Component {
   constructor(props) {
@@ -10,7 +14,6 @@ export class Admin extends Component {
     this.state = {
       redirect: false,
       productList: [],
-      warehouseList: [],
       page: 1,
       maxPage: 0,
       itemPerPage: 5,
@@ -22,20 +25,26 @@ export class Admin extends Component {
       addPrice: 0,
       addCategory: "",
       addImgproduct: "",
-      addWarehouse: "",
+      AddQuantity: "",
+      selectedOption: null,
+
+      productRadio: "",
 
       editId: 0,
 
-      editProductName: "",
-      editPrice: 0,
-      editCategory: "",
-      editImgproduct: "",
-      editWarehouse: "",
+      // editProductName: "",
+      // editPrice: 0,
+      // editCategory: "",
+      // editImgproduct: "",
+      // editWarehouse: "",
+      editQuantity: "",
     };
   }
 
   fetchProducts = () => {
-    Axios.get(`${URL_API}/products/get`)
+    console.log(this.props.id);
+    Axios.get(`${URL_API}/products/get/${this.props.id}`)
+
       .then((result) => {
         this.setState({
           productList: result.data,
@@ -43,20 +52,37 @@ export class Admin extends Component {
         });
       })
       .catch((err) => {
-        alert("Terjadi Kesalahan di Server");
+        console.log(err);
+        // alert("Terjadi Kesalahan di Server");
       });
   };
 
-
+  selectProducts = () => {
+    Axios.get(`${URL_API}/select/get`)
+      .then((result) => {
+        console.log("cek select", result.data);
+        let generate = result.data.map((val, idx) => {
+          return { ...val, value: val.id_product, label: val.productName };
+        });
+        this.setState({
+          productList: generate,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        // alert("Terjadi Kesalahan di Server");
+      });
+  };
 
   editToggle = (editData) => {
     this.setState({
       editId: editData.id_product,
-      editProductName: editData.productName,
-      editPrice: parseInt(editData.price),
-      editCategory: editData.category,
-      editImgproduct: editData.img_product,
-      editWarehouse: editData.id_warehouse,
+      // editProductName: editData.productName,
+      // editPrice: parseInt(editData.price),
+      // editCategory: editData.category,
+      // editImgproduct: editData.img_product,
+      // editWarehouse: editData.id_warehouse,
+      editQuantity: editData.Quantity,
     });
   };
 
@@ -65,33 +91,16 @@ export class Admin extends Component {
   };
 
   saveBtnHandler = () => {
-    if (this.state.addFile) {
-      console.log(this.state.addFile);
-      let formData = new FormData();
-
-      let obj = {
-        productName: this.state.editProductName,
-        price: parseInt(this.state.editPrice),
-        category: this.state.editCategory,
-        img_product: this.state.editImgproduct,
-        id_warehouse: this.state.editWarehouse,
-      };
-
-      console.log(obj);
-      formData.append("data", JSON.stringify(obj));
-      formData.append("file", this.state.addFile);
-      Axios.patch(
-        `${URL_API}/products/edit-product/${this.state.editId}`,
-        formData
-      )
-        .then(() => {
-          this.fetchProducts();
-          this.cancelEdit();
-        })
-        .catch(() => {
-          alert("Terjadi Kesalahan");
-        });
-    }
+    Axios.patch(`${URL_API}/products/edit-product/${this.state.editId}`, {
+      Quantity: this.state.editQuantity,
+    })
+      .then(() => {
+        this.fetchProducts();
+        this.cancelEdit();
+      })
+      .catch(() => {
+        alert("Terjadi Kesalahan");
+      });
   };
 
   deleteBtnHandler = (deleteId) => {
@@ -102,8 +111,9 @@ export class Admin extends Component {
         .then(() => {
           this.fetchProducts();
         })
-        .catch(() => {
-          alert("Terjadi Kesalahan");
+        .catch((err) => {
+          console.log(err);
+          // alert("Terjadi Kesalahan");
         });
     } else alert("Cancel delete barang");
   };
@@ -119,67 +129,30 @@ export class Admin extends Component {
         return (
           <tr>
             <td scope="col">{val.id_product}</td>
+            <td scope="col">{val.productName}</td>
+            <td scope="col">{val.price}</td>
+            <td scope="col">{val.category}</td>
             <td scope="col">
-              <input
-                value={this.state.editProductName}
-                onChange={this.inputHandler}
-                type="text"
-                className="form-control"
-                name="editProductName"
+              <img
+                src={URL_API + val.img_product}
+                className="img-thumbnail mb-2"
+                alt="image_user"
+                style={{ width: "100px" }}
               />
             </td>
-            <td scope="col">
+            <td scope="col">{val.Kode_Gudang}</td>
+            <div class="form-group">
+              <label for="exampleFormControlFile1">Qty :</label>
               <input
-                value={this.state.editPrice}
                 onChange={this.inputHandler}
-                type="text"
-                className="form-control"
-                name="editPrice"
-              />
-            </td>
-            <td scope="col">
-              <input
-                value={this.state.editCategory}
-                onChange={this.inputHandler}
-                type="text"
-                className="form-control"
-                name="editCategory"
-              />
-            </td>
-
-            <td scope="col">
-              <input
-                value={this.state.editImgproduct}
-                onChange={this.inputHandler}
-                type="text"
-                className="form-control"
-                name="editImgproduct"
-              />
-            </td>
-            <td>
-              <select
-                onChange={this.inputHandler}
-                name="editWarehouse"
-                className="form-control"
-                value={this.state.editWarehouse}
-              >
-                {this.state.warehouseList.map((val) => {
-                  if (val.id_warehouse) {
-                    return <option value={val.id_warehouse}>{val.Nama}</option>;
-                  }
-                })}
-              </select>
-            </td>
-
-            <td scope="col">
-              <input
-                value={this.state.editImgproduct}
-                onChange={this.inputHandler}
-                type="text"
-                className="form-control"
+                type="number"
+                class="form-control"
+                id="editQuantity"
                 name="editQuantity"
+                defaultValue="0"
               />
-            </td>
+            </div>
+
             <td scope="col">
               <button
                 onClick={this.saveBtnHandler}
@@ -195,6 +168,7 @@ export class Admin extends Component {
           </tr>
         );
       }
+
       return (
         <tr>
           <td scope="col">{val.id_product}</td>
@@ -233,34 +207,57 @@ export class Admin extends Component {
   };
 
   addNewProduct = () => {
-    if (this.state.addFile) {
-      console.log(this.state.addFile);
-      let formData = new FormData();
+    if (this.state.productRadio === "option1") {
+      if (this.state.addFile) {
+        console.log(this.state.addFile);
+        let formData = new FormData();
 
-      let obj = {
-        productName: this.state.addProductName,
-        price: parseInt(this.state.addPrice),
-        category: this.state.addCategory,
-        id_warehouse: this.state.addWarehouse,
-        // img_product: this.state.addImgproduct,
-      };
+        let obj = {
+          productName: this.state.addProductName,
+          price: parseInt(this.state.addPrice),
+          category: this.state.addCategory,
+          // id_warehouse: this.state.addWarehouse,
+          // img_product: this.state.addImgproduct,
+        };
 
-      formData.append("data", JSON.stringify(obj));
-      formData.append("file", this.state.addFile);
-      Axios.post(`${URL_API}/products/add-product`, formData)
-        .then(() => {
-          this.fetchProducts();
-          this.setState({
-            addProductName: "",
-            addPrice: 0,
-            addCategory: "",
-            addImgproduct: "",
+        formData.append("data", JSON.stringify(obj));
+        formData.append("file", this.state.addFile);
+        Axios.post(`${URL_API}/products/add-product`, formData)
+          .then((res) => {
+            console.log(res);
+            Axios.post(`${URL_API}/products/add-product-warehouse`, {
+              id_product: res.data.id,
+              id_warehouse: this.props.id_warehouse,
+              Quantity: this.state.AddQuantity,
+            }).then(() => {
+              this.fetchProducts();
+              this.setState({
+                addProductName: "",
+                addPrice: 0,
+                addCategory: "",
+                addImgproduct: "",
+              });
+            });
+          })
+          .catch((err) => {
+            console.log(err);
+            // alert("Terjadi Kesalahan di Server");
           });
-        })
-        .catch((err) => {
-          console.log(err);
-          alert("Terjadi Kesalahan di Server");
+      }
+    } else {
+      Axios.post(`${URL_API}/products/add-product-warehouse`, {
+        id_product: this.state.selectedOption.id_product,
+        id_warehouse: this.props.id_warehouse,
+        Quantity: this.state.AddQuantity,
+      }).then(() => {
+        this.fetchProducts();
+        this.setState({
+          addProductName: "",
+          addPrice: 0,
+          addCategory: "",
+          addImgproduct: "",
         });
+      });
     }
   };
 
@@ -291,11 +288,18 @@ export class Admin extends Component {
     this.setState({ [name]: value });
   };
 
+  handleChange = (selectedOption) => {
+    this.setState({ selectedOption });
+    console.log(`Option selected:`, selectedOption);
+  };
+
   componentDidMount() {
     if (sessionStorage.getItem("role") !== "admin") {
       history.push("/");
     }
+
     this.fetchProducts();
+    this.selectProducts();
   }
 
   render() {
@@ -390,72 +394,140 @@ export class Admin extends Component {
               </div>
               <div class="modal-body">
                 <form>
-                  <div class="form-group">
-                    <label for="recipient-name" class="col-form-label">
-                      Product Name:
-                    </label>
-                    <input
-                      onChange={this.inputHandler}
-                      type="text"
-                      class="form-control"
-                      id="productName"
-                      name="addProductName"
-                    />
+                  <div className="container">
+                    <div className="row">
+                      <div className="col-6">
+                        <div class="form-check">
+                          <input
+                            onChange={this.inputHandler}
+                            class="form-check-input"
+                            type="radio"
+                            name="productRadio"
+                            id="newProduct"
+                            value="option1"
+                          />
+                          <label class="form-check-label" for="exampleRadios1">
+                            Add New Product
+                          </label>
+                        </div>
+                      </div>
+
+                      <div className="col-6">
+                        <div class="form-check">
+                          <input
+                            onChange={this.inputHandler}
+                            class="form-check-input"
+                            type="radio"
+                            name="productRadio"
+                            id="oldProduct"
+                            value="option2"
+                          />
+                          <label class="form-check-label" for="exampleRadios2">
+                            Exist product
+                          </label>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <div class="form-group">
-                    <label for="message-text" class="col-form-label">
-                      Price:
-                    </label>
-                    <input
-                      onChange={this.inputHandler}
-                      type="number"
-                      class="form-control"
-                      id="price"
-                      name="addPrice"
-                    />
-                  </div>
-                  <div class="form-group">
-                    <label for="recipient-name" class="col-form-label">
-                      Category:
-                    </label>
-                    <input
-                      onChange={this.inputHandler}
-                      type="text"
-                      class="form-control"
-                      id="category"
-                      name="addCategory"
-                    />
-                  </div>
-                  <div class="form-group">
-                    <label for="exampleFormControlFile1">Input Image :</label>
-                    <input
-                      onChange={this.onBtnAddFile}
-                      type="file"
-                      class="form-control-file"
-                      id="img"
-                      name="addImgproduct"
-                    />
-                  </div>
-                  {/* <div class="form-group">
-						<label for="recipient-name" class="col-form-label">
-						  Warehouse:
-						</label>
-						<select
-						  onChange={this.inputHandler}
-						  name="addWarehouse"
-						  className="form-control"
-						>
-						  {this.state.warehouseList.map((val) => {
-							if (val.id_warehouse) {
-							  return (
-								<option value={val.id_warehouse}>
-								  {val.Kode_Gudang}
-								</option>
-							  );
-							}
-						  })}
-						</select>
-					  </div> */}
+
+                  {this.state.productRadio === "option1" && (
+                    <>
+                      <div>
+                        <h2>Add New Product</h2>
+                        <div class="form-group">
+                          <label for="recipient-name" class="col-form-label">
+                            Product Name:
+                          </label>
+                          <input
+                            onChange={this.inputHandler}
+                            type="text"
+                            class="form-control"
+                            id="productName"
+                            name="addProductName"
+                            value={this.state.productList.productName}
+                          />
+                        </div>
+                        <div class="form-group">
+                          <label for="message-text" class="col-form-label">
+                            Price:
+                          </label>
+                          <input
+                            onChange={this.inputHandler}
+                            type="number"
+                            class="form-control"
+                            id="price"
+                            name="addPrice"
+                            value={this.state.productList.price}
+                          />
+                        </div>
+                        <div class="form-group">
+                          <label for="recipient-name" class="col-form-label">
+                            Category:
+                          </label>
+                          <input
+                            onChange={this.inputHandler}
+                            type="text"
+                            class="form-control"
+                            id="category"
+                            name="addCategory"
+                            value={this.state.productList.category}
+                          />
+                        </div>
+                        <div class="form-group">
+                          <label for="exampleFormControlFile1">
+                            Upload Image :
+                          </label>
+                          <input
+                            onChange={this.onBtnAddFile}
+                            type="file"
+                            class="form-control-file"
+                            id="img"
+                            name="addImgproduct"
+                          />
+                        </div>
+
+                        <div class="form-group">
+                          <label for="exampleFormControlFile1">Qty :</label>
+                          <input
+                            onChange={this.inputHandler}
+                            type="number"
+                            class="form-control"
+                            id="AddQuantity"
+                            name="AddQuantity"
+                            defaultValue="0"
+                          />
+                        </div>
+                      </div>
+                    </>
+                  )}
+
+                  {this.state.productRadio === "option2" && (
+                    <div>
+                      <h2>Exist Product</h2>
+                      <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">
+                          Search Product Name:
+                        </label>
+
+                        <Select
+                          options={this.state.productList}
+                          value={this.state.selectedOption}
+                          onChange={this.handleChange}
+                        />
+                      </div>
+                      <div class="form-group">
+                        <label for="exampleFormControlFile1">Qty :</label>
+                        <input
+                          onChange={this.inputHandler}
+                          type="number"
+                          class="form-control"
+                          id="AddQuantity"
+                          name="AddQuantity"
+                          defaultValue="0"
+                        />
+                      </div>
+                    </div>
+                  )}
                 </form>
               </div>
               <div class="modal-footer">
@@ -466,6 +538,7 @@ export class Admin extends Component {
                 >
                   Close
                 </button>
+
                 <button
                   onClick={this.addNewProduct}
                   type="submit"
@@ -482,4 +555,14 @@ export class Admin extends Component {
   }
 }
 
-export default Admin;
+const mapStateToProps = (state) => {
+  console.log(state.authReducer);
+  return {
+    id: state.authReducer.id,
+    id_warehouse: state.authReducer.id_warehouse,
+    // fullname: state.authReducer.fullname,
+    // role: state.authReducer.role,
+  };
+};
+
+export default connect(mapStateToProps)(Admin);

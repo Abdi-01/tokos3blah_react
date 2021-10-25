@@ -25,7 +25,8 @@ export class Home extends Component {
         });
       })
       .catch((err) => {
-        alert("Terjadi kesalahan di server");
+        // alert("Terjadi kesalahan di server");
+        console.log(err)
       });
   };
 
