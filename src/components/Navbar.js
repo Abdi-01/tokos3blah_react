@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { logoutAction } from "../actions/login";
 
 class Navbar extends Component {
+
 	constructor(props) {
 		super(props);
 		this.state = {};

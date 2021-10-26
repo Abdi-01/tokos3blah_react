@@ -3,58 +3,28 @@ import image_user from "../asset/image/logo.jpeg";
 import Axios from "axios";
 import { URL_API } from "../helper";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 
 export class User_data extends Component {
   state = {
-    userList: [],
+    userList: {},
   };
 
-  fetchProducts = () => {
-    Axios.get(`${URL_API}/user/get`)
+  fetchUser = async () => {
+    await Axios.get(`${URL_API}/admin/getadmin/${sessionStorage.getItem("id")}`)
       .then((result) => {
-        this.setState({ userList: result.data });
+        console.log(result);
+        this.setState({ userList: result.data[0] });
       })
       .catch((err) => {
-        console.log(err)
+        console.log(err);
         // alert("Terjadi Kesalahan di Server");
       });
   };
 
   componentDidMount() {
-    this.fetchProducts();
+    this.fetchUser();
   }
-
-  renderProduct = () => {
-    return this.state.userList.map((val) => {
-      return (
-        <tr>
-          <td scope="col">{val.iduser}</td>
-          <td scope="col">{val.fullname}</td>
-          <td scope="col">{val.email}</td>
-          <td scope="col">{val.age}</td>
-          <td scope="col">{val.AddressDb}</td>
-          <td scope="col">{val.password}</td>
-          
-          <td scope="col">
-            <button
-              onClick={() => this.editToggle(val)}
-              className="btn btn-success mr-2"
-              type="submit"
-            >
-              Edit
-            </button>
-            <button
-              onClick={() => this.deleteBtnHandler(val.id_product)}
-              className="btn btn-danger"
-              type="submit"
-            >
-              Delete
-            </button>
-          </td>
-        </tr>
-      );
-    });
-  };
 
   render() {
     return (
@@ -62,22 +32,9 @@ export class User_data extends Component {
         <div className="card mb-3">
           <div className="row no-gutters">
             <div className="col-md-3">
-              {/* {this.state.photos.map((photo) => (
-                <img src={`${API_URL}/upload/${photo.filename}`} />
-              ))} */}
               <img src={image_user} alt="image_user" className="img-fluid" />
-              {/* <div className="d-flex justify-content-end pt-2">
-                <input
-                  type="file"
-                  className="form-control-file"
-                  id="profile_picture"
-                  name="file"
-                  onChange={() => this.uploadHandler}
-                />
-              </div> */}
             </div>
             <div className="col-md-9">
-              y
               <div className="card-body">
                 <h5 className="card-title">Profile User</h5>
 
@@ -94,15 +51,15 @@ export class User_data extends Component {
                   </thead>
                   <tbody>
                     <tr>
-                      <td>Mark</td>
-                      <td>Pria</td>
-                      <td>admin@gmail.com</td>
-                      <td>Kp. Pajagan</td>
-                      <td>17</td>
+                      <td scope="col">{this.state.userList.fullname}</td>
+                      <td scope="col">{this.props.gender}</td>
+                      <td scope="col">{this.props.email}</td>
+                      <td scope="col">{this.props.AddressDb}</td>
+                      <td scope="col">{this.props.age}</td>
 
                       <td colspan="2">
                         <Link
-                          to="/form_user"
+                          to={`/form_user/${this.props.id}`}
                           className="btn btn-success btn-sm mr-2"
                         >
                           Edit
@@ -120,4 +77,16 @@ export class User_data extends Component {
   }
 }
 
-export default User_data;
+const mapStateToProps = (state) => {
+  console.log(state.authReducer.id);
+  return {
+    id: state.authReducer.iduser,
+    fullname: state.authReducer.fullname,
+    email: state.authReducer.email,
+    age: state.authReducer.age,
+    AddressDb: state.authReducer.AddressDb,
+    gender: state.authReducer.gender,
+  };
+};
+
+export default connect(mapStateToProps)(User_data);

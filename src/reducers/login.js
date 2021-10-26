@@ -4,6 +4,10 @@ const INITIAL_STATE = {
   password: "",
   role: "",
   id_warehouse: "",
+  email: "",
+  age: "",
+  gender: "",
+  profile_picture: "",
 };
 
 export const authReducer = (state = INITIAL_STATE, action) => {
