@@ -12,6 +12,7 @@ import {
 	FormText,
 	Table,
 } from "reactstrap";
+import { history } from "../App";
 
 export class AddAdmin extends Component {
 	constructor(props) {
@@ -20,6 +21,12 @@ export class AddAdmin extends Component {
 			db_tokos3blah: [],
 			selectedID: null,
 		};
+	}
+
+	componentDidMount() {
+		if (sessionStorage.getItem("role") !== "super_admin") {
+			history.push("/");
+		}
 	}
 	componentDidMount() {
 		this.getData();
@@ -73,13 +80,28 @@ export class AddAdmin extends Component {
 						<td>{item.age}</td>
 						<td>{item.gender}</td>
 						<td>{item.role}</td>
-						<td>{item.nama}</td>
-						<td>{item.lokasi}</td>
+						<td>{item.Kode_Gudang}</td>
+						<td>{item.Lokasi}</td>
 						<td>
 							<Button onClick={() => this.setState({ selectedID: index })}>
 								Edit
 							</Button>
-							<Button>Delete</Button>
+							<Button
+								onClick={() => {
+									console.log("delete Admin => ", item.iduser);
+									Axios.post(URL_API + "/users/delete-admin", {
+										iduser: item.iduser,
+									})
+										.then((res) => {
+											this.getData();
+										})
+										.catch((err) => {
+											console.log(err);
+										});
+								}}
+							>
+								Delete
+							</Button>
 						</td>
 					</tr>
 				);
@@ -144,21 +166,10 @@ export class AddAdmin extends Component {
 							/>
 						</td>
 						<td>
-							{this.state.selectedID == null ? (
-								<>
-									<Button onClick={() => this.setState({ selectedID: index })}>
-										Edit
-									</Button>
-									<Button>Delete</Button>
-								</>
-							) : (
-								<>
-									<Button onClick={() => this.setState({ selectedID: null })}>
-										No
-									</Button>
-									<Button>Yes</Button>
-								</>
-							)}
+							<Button onClick={() => this.setState({ selectedID: null })}>
+								No
+							</Button>
+							<Button>Yes</Button>
 						</td>
 					</tr>
 				);
@@ -209,11 +220,14 @@ export class AddAdmin extends Component {
 					<FormGroup>
 						<Label for="gender">gender</Label>
 						<Input
-							type="text"
+							type="select"
 							name="text"
 							id="gender"
 							innerRef={(gender) => (this.gender = gender)}
-						/>
+						>
+							<option value={"Male"}>Male</option>
+							<option value={"Female"}>Female</option>
+						</Input>
 					</FormGroup>
 					<FormGroup>
 						<Label for="role">role</Label>

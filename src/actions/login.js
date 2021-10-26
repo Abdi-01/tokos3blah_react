@@ -9,7 +9,7 @@ export const authLogin = (data) => {
 };
 
 export const userKeepLoginAction = (dispatch, userLocalStorage) => {
-	Axios.post(
+	Axios.get(
 		"http://localhost:2200/users/keep-login",
 		{},
 		{
@@ -45,10 +45,10 @@ export const CheckStorageAction = (dispatch) => {
 	});
 };
 
-export const logoutAction = (dispatch) => {
+export const logoutAction = () => {
 	localStorage.removeItem("token_s3blah");
 
-	dispatch({
+	return({
 		type: "USER_LOGOUT",
 	});
 };
